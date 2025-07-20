@@ -1,221 +1,144 @@
-Take Home coding test
-We want you to create a REST API for a fictional bank called Eagle Bank which conforms to the provided OpenAPI
-specification and the following
-scenarios. The API will allow a user to add their details, fetch, update, detail their details. A user can also create, fetch, update and delete their own bank
-accounts and deposit or withdraw money from the account. Withdrawing and depositing money will be stored as transactions against a bank account which
-be retrieved but not modified or deleted.
-You can spend as little or as much time on this tech test, but it is your opportunity to showcase your skills. We do not expect all the endpoints
-to be
-completed for submission but at least we expect some of the basic operations to be ready (ie, Create and Fetch for User, Account and Transaction).
-This is designed to simulate real world tasks that you may be required to complete in the role, so AI code assistants can be used
-to help you with this
-solution. Once submitted a member of the hiring team will review the code and may invite you to a follow up session to walk them through the code and do
-a pair/ mob coding session to extend the solution.
-For each of the following scenarios, appropriate error handling should be included to handle invalid or missing credentials.
-Please submit your solution by pushing your code to a public GitHub repo and sharing a link to the hiring team as soon as it's completed. If you require
-longer than 7 days, please reach out to the hiring team.
-Create a user
-Scenario: Create a new user
-Given a user wants to signup for Eagle Bank
-When the user makes a `POST` request to the `/v1/users` endpoint with all the required data
-Then a new user is created
-Scenario: Create a new user without supplying all required data
-Given a user has successfully authenticated
-When the user makes a `POST` request to the `/v1/users` endpoint with required data missing
-Then the system returns a Bad Request status code and error message
-Authenticate a user
-We want you to implement one or more endpoints to authenticate a user and return a JWT token which can be passed as a bearer token to all endpoints
-expect creating a user. Please update the OpenAPI specification
-with the details of the endpoint you implement to authenticate a user and submit it as part
-of your solution.
-Fetch a user
-Scenario: User wants to fetch their user details
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/users/{userId}` endpoint supplying their `userId`
-Then the system fetches the user details
-Scenario: User wants to fetch the user details of another user
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/users/{userId}` endpoint supplying another user's `userId`
-Then the system returns a Forbidden status code and error message
-Scenario: User wants to fetch the user details of a non-existent user
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/users/{userId}` endpoint supplying a `userId` which doesn't exist
-Then the system returns a Not Found status code and error message
-Update a user
-Scenario: User wants to update their user details
-Given a user has successfully authenticated
-When the user makes a `PATCH` request to the `/v1/users/{userId}` endpoint supplying their `userId` and all the required data
-Then the system updates the user details and returns the updated data
-Scenario: User wants to update the user details of another user
-Given a user has successfully authenticated
-When the user makes a `PATCH` request to the `/v1/users/{userId}` endpoint supplying another user's `userId`
-Then the system returns a Forbidden status code and error message
-Scenario: User wants to fetch the user details of a non-existent user
-Given a user has successfully authenticated
-When the user makes a `PATCH` request to the `/v1/users/{userId}` endpoint supplying a `userId` which doesn't exist
-Then the system returns a Not Found status code and error message
-Delete a user
-Scenario: User wants to delete their user details
-Given a user has successfully authenticated
-When the user makes a `DELETE` request to the `/v1/users/{userId}` endpoint
-And they do not have a bank account
-Then the system deletes their user
-Scenario: User wants to delete their user details and they have a bank account
-Given a user has successfully authenticated
-When the user makes a `DELETE` request to the `/v1/users/{userId}` endpoint
-And they have a bank account
-Then the system returns a Conflict status code and error message
-Scenario: User wants to delete user details of another user
-Given a user has successfully authenticated
-When the user makes a `DELETE` request to the `/v1/users/{userId}` endpoint
-And the `userId` is associated with another user
-Then the system returns a Forbidden status code and error message
-Scenario: User wants to delete user details of a non-existent user
-Given a user has successfully authenticated
-When the user makes a `DELETE` request to the `/v1/users/{userId}` endpoint
-And the `userId` doesn't exist
-Then the system returns a Not Found status code and error message
-Create a Bank Account
-Scenario: User wants to create a new bank account
-Given a user has successfully authenticated
-When the user makes a `POST` request to the `/v1/accounts` endpoint with all the required data
-Then a new bank account is created, and the account details are returned
-Scenario: User wants to create a new bank account without supplying all required data
-Given a user has successfully authenticated
-When the user makes a `POST` request to the `/v1/accounts` endpoint with required data missing
-Then the system returns a Bad Request status code and error message
-List bank accounts
-Scenario: User wants to view their bank accounts
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts` endpoint
-Then all the bank accounts associated with their `userId` are returned
-Fetch a Bank Account
-Scenario: User wants to fetch their bank account details
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}` endpoint
-And the account is associated with their `userId`
-Then the system fetches the bank account details
-Scenario: User wants to fetch another user's bank account details
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}` endpoint
-And the account is not associated with their `userId`
-Then the system returns a Forbidden status code and error message
-Scenario: User wants to fetch a non-existent bank account
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}` endpoint
-And the `accountId` doesn't exist
-Then the system returns a Not Found status code and error message
-Update a Bank Account
-Scenario: User wants to update their bank account details
-Given a user has successfully authenticated
-When the user makes a `PATCH` request to the `/v1/accounts/{accountId}` endpoint supplying all the required data
-And the account is associated with their `userId`
-Then the system updates the bank account information and returns the updated data
-Scenario: User wants to fetch another user's bank account details
-Given a user has successfully authenticated
-When the user makes a `PATCH` request to the `/v1/accounts/{accountId}` endpoint
-And the account is not associated with their `userId`
-Then the system returns a Forbidden status code and error message
-Scenario: User wants to fetch a non-existent bank account
-Given a user has successfully authenticated
-When the user makes a `PATCH` request to the `/v1/accounts/{accountId}` endpoint
-And the `accountId` doesn't exist
-Then the system returns a Not Found status code and error message
-Delete a Bank Account
-Scenario: User deletes an existing bank account
-Given a user has successfully authenticated
-When the user makes a `DELETE` request to the `/v1/accounts/{accountId}` endpoint
-And the account is associated with their `userId`
-Then the system deletes the bank account
-Scenario: User wants to delete another user's bank account details
-Given a user has successfully authenticated
-When the user makes a `DELETE` request to the `/v1/accounts/{accountId}` endpoint
-And the account is not associated with their `userId`
-Then the system returns a Forbidden status code and error message
-Scenario: User wants to delete a non-existent bank account
-Given a user has successfully authenticated
-When the user makes a `DELETE` request to the `/v1/accounts/{accountId}` endpoint
-And the `accountId` doesn't exist
-Then the system returns a Not Found status code and error message
-Create a Transaction
-Scenario: User wants to deposit money into their bank account
-Given a user has successfully authenticated
-When the user makes a `POST` request to the `/v1/accounts/{accountId}/transactions` endpoint with all the required data
-And the transaction type is `deposit`
-And the account is associated with their `userId`
-Then the deposit is registered against the account
-And the account balance is updated
-Scenario: User wants to withdraw money from their bank account
-Given a user has successfully authenticated
-When the user makes a `POST` request to the `/v1/accounts/{accountId}/transactions` endpoint with all the required data
-And the transaction type is `withdrawal`
-And the account has sufficient funds
-And the account is associated with their `userId`
-Then the withdrawal is registered against the account
-And the account balance is updated
-Scenario: User wants to withdraw money from their bank account but they have insufficient funds
-Given a user has successfully authenticated
-When the user makes a `POST` request to the `/v1/accounts/{accountId}/transactions` endpoint with all the required data
-And the transaction type is `withdrawal`
-And the account has insufficient funds
-And the account is associated with their `userId`
-Then the system returns a Unprocessable Entity status code and error message
-Scenario: User wants to deposit or withdraw money into another user's bank account
-Given a user has successfully authenticated
-When the user makes a `POST` request to the `/v1/accounts/{accountId}/transactions` endpoint with all the required data
-And the account is not associated with their `userId`
-Then the system returns a Forbidden status code and error message
-Scenario: User wants to deposit or withdraw money into a non-existent bank account
-Given a user has successfully authenticated
-When the user makes a `POST` request to the `/v1/accounts/{accountId}/transactions` endpoint with all the required data
-And the `accountId` doesn't exist
-Then the system returns a Not Found status code and error message
-Scenario: User wants to deposit or withdraw money without supplying all required data
-Given a user has successfully authenticated
-When the user makes a `POST` request to the `/v1/accounts/{accountId}/transactions` endpoint with required data missing
-Then the system returns a Bad Request status code and error message
-List Transactions
-Scenario: User wants to view all transactions on their bank account
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}/transactions` endpoint
-And the account is associated with their `userId`
-Then the transactions are returned
-Scenario: User wants to view all transactions on another user's bank account
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}/transactions` endpoint
-And the account is not associated with their `userId`
-Then the system returns a Forbidden status code and error message
-Scenario: User wants to view all transactions on a non-existent bank account
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}/transactions` endpoint
-And the `accountId` doesn't exist
-Then the system returns a Not Found status code and error message
-Fetch a Transaction
-Scenario: User wants to fetch a transaction on their bank account
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}/transactions/{transactionId}` endpoint
-And the account is associated with their `userId`
-And the `transactionId` is associated with the `accountId` specified
-Then the transaction details are returned
-Scenario: User wants to fetch a transaction on another user's bank account
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}/transactions/{transactionId}` endpoint
-And the account is not associated with their `userId`
-Then the system returns a Forbidden status code and error message
-Scenario: User wants to fetch a transaction on a non-existent bank account
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}/transactions/{transactionId}` endpoint
-And the `accountId` doesn't exist
-Then the system returns a Not Found status code and error message
-Scenario: User wants to fetch a transactions on a non-existent transaction ID
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}/transactions/{transactionId}` endpoint
-And the account is associated with their `userId`
-And the `transactionId` does not exist
-Then the system returns a Not Found status code and error message
-Scenario: User wants to fetch a transaction against the wrong bank account
-Given a user has successfully authenticated
-When the user makes a `GET` request to the `/v1/accounts/{accountId}/transactions/{transactionId}` endpoint
-And the account is associated with their `userId`
-And the `transactionId` is not associated with the `accountId` specified
-Then the system returns a Not Found status code and error message
+## Getting Started
+
+### Prerequisites
+
+- **Java 21** or higher
+- **Maven 3.6+** (or use the included Maven wrapper)
+- **Git** (for cloning the repository)
+
+### Running the Application
+
+#### Option 1: Using Maven Wrapper (Recommended)
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd eaglebank
+
+# Run the application using Maven wrapper
+./mvnw spring-boot:run
+```
+
+#### Option 2: Using Local Maven
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd eaglebank
+
+# Clean and compile the project
+mvn clean compile
+
+# Run the application
+mvn spring-boot:run
+```
+
+#### Option 3: Using JAR file
+
+```bash
+# Build the JAR file
+./mvnw clean package
+
+# Run the JAR file
+java -jar target/eaglebank-0.0.1-SNAPSHOT.jar
+```
+
+### Application Access
+
+Once the application is running, you can access:
+
+#### Swagger UI (API Documentation)
+- **URL**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- **Description**: Interactive API documentation where you can test all endpoints
+- **Features**: 
+  - Try out API endpoints directly from the browser
+  - View request/response schemas
+  - Authentication support for testing protected endpoints
+
+#### H2 Database Console (Development)
+- **URL**: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
+- **JDBC URL**: `jdbc:h2:mem:eaglebank`
+- **Username**: `sa`
+- **Password**: `password`
+- **Description**: Web-based database console for viewing and querying data during development
+
+#### OpenAPI Specification
+- **URL**: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+- **Description**: Raw OpenAPI 3.0 specification in JSON format
+
+### Authentication
+
+The API uses JWT (JSON Web Token) authentication. To access protected endpoints:
+
+1. Create a user account using `POST /v1/users`
+2. Authenticate using the authentication endpoint to get a JWT token
+3. Include the token in the `Authorization` header as `Bearer <token>`
+
+### Testing
+
+#### Run Unit Tests
+```bash
+./mvnw test
+```
+
+#### Run Integration Tests
+```bash
+./mvnw test -Dtest=EagleBankIntegrationTest
+```
+
+#### Run All Tests
+```bash
+./mvnw clean test
+```
+
+### Development Notes
+
+- The application uses an **H2 in-memory database**, so data is reset on each restart
+- **Debug logging** is enabled for development
+- **SQL queries** are logged to the console for debugging
+- The application runs on **port 8080** by default
+- **Hot reload** is supported during development when using Spring Boot DevTools
+
+### Troubleshooting
+
+#### Common Issues
+
+1. **Port 8080 already in use**
+   ```bash
+   # Change the port in application.properties or use:
+   ./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8081
+   ```
+
+2. **Java version issues**
+   ```bash
+   # Check your Java version
+   java -version
+   # Should be Java 21 or higher
+   ```
+
+3. **Maven wrapper permissions (Linux/Mac)**
+   ```bash
+   chmod +x mvnw
+   ```
+
+### API Testing with curl
+
+#### Create a User
+```bash
+curl -X POST http://localhost:8080/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "password": "securePassword123"
+  }'
+```
+
+#### Get User (requires authentication)
+```bash
+curl -X GET http://localhost:8080/v1/users/{userId} \
+  -H "Authorization: Bearer <your-jwt-token>"
+```
+
+For more detailed API examples, please refer to the Swagger UI documentation at [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html).
